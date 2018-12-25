@@ -15,7 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends RootActivity {
 
     TextInputEditText emailEt,passEt;
     Button login,signup;
@@ -65,6 +65,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
 
 
+            }
+        });
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(LoginActivity.this,SignupActivity.class);
+                startActivity(i);
             }
         });
     }
