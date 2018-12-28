@@ -1,4 +1,4 @@
-package com.example.muhammedraheezrahman.todolist;
+package com.example.muhammedraheezrahman.todolist.UI;
 
 import android.animation.Animator;
 import android.content.Intent;
@@ -7,13 +7,15 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
+import com.example.muhammedraheezrahman.todolist.R;
+
 public class SplashScreen extends RootActivity {
     int splashScreenDuration = 4000;
     ImageView imageView;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.splash_activity);
+        setContentView(R.layout.activity_splash);
         imageView = (ImageView) findViewById(R.id.logo_image);
 
         propagateToMainActivity();

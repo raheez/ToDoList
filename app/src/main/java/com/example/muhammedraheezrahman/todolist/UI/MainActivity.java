@@ -1,11 +1,10 @@
-package com.example.muhammedraheezrahman.todolist;
+package com.example.muhammedraheezrahman.todolist.UI;
 
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.muhammedraheezrahman.todolist.Adapter.RecyclerAdapter;
 import com.example.muhammedraheezrahman.todolist.Model.Todo;
+import com.example.muhammedraheezrahman.todolist.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -39,6 +39,9 @@ public class MainActivity extends RootActivity {
     private DatabaseReference databaseReference;
     int visibleThreashold=1,totalCount,lastItem;
     private KProgressHUD hud;
+    private List<Todo> list;
+    private List<Todo> searchList;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,14 +58,16 @@ public class MainActivity extends RootActivity {
         rv.setAdapter(adapter);
         todoList = getToDoList();
 
+        llm.setSmoothScrollbarEnabled(false);
 
         addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                addToDo();
+                addToDo();
 //                updateTodo("LU_Aqn3MKEwuqztIJAg");
 //                delete("LU_Aqn3MKEwuqztIJAg");
 //                showProgress();
+//                searchTodo();
             }
         });
     }
@@ -73,18 +78,20 @@ public class MainActivity extends RootActivity {
 
         //
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            rv.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                @Override
-                public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-                    lastItem = llm.findLastVisibleItemPosition();
-                    totalCount = llm.getItemCount();
-                    if( totalCount <= (lastItem + visibleThreashold) ){
+           rv.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
-                        getToDoList();
+               @Override
+               public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                   super.onScrolled(recyclerView, dx, dy);
+                   lastItem = llm.findLastVisibleItemPosition();
+                   totalCount = llm.getItemCount();
+                   if( totalCount <= (lastItem + visibleThreashold) ){
 
-                    }
-                }
-            });
+                       getToDoList();
+
+                   }
+               }
+           });
         }
     }
 
@@ -101,26 +108,52 @@ public class MainActivity extends RootActivity {
     }
 
     private List<Todo> getToDoList() {
+        list = new ArrayList<>();
+        list.clear();
+        database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+//                addChildEventListener(new ChildEventListener() {
+//                    @Override
+//                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                    }
+//                })
+                addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot data : dataSnapshot.getChildren() ){
+                            Todo todo = data.getValue(Todo.class);
+                            list.add(todo);
+                        }
+                        if(!list.isEmpty())
+                            adapter.addToList(list);
+                    }
 
-        final List<Todo> list = new ArrayList<>();
-        database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                todoList.clear();
-                for (DataSnapshot data : dataSnapshot.getChildren() ){
-                    Todo todo = data.getValue(Todo.class);
-                    todoList.add(todo);
-                }
-                if(!todoList.isEmpty())
-                adapter.addToList(todoList);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
+                    }
+                });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
         return list;
     }
@@ -144,8 +177,8 @@ public class MainActivity extends RootActivity {
         Log.d("AlanLey","the key is "+ key);
 
         Todo todo = new Todo();
-        todo.setName("Vinod new");
-        todo.setMessage("My message is Freedom");
+        todo.setName("Sai James Bond");
+        todo.setMessage("My message is Freedom from Sai");
         todo.setDate(dateString);
         todo.setId(key);
 
@@ -178,7 +211,8 @@ public class MainActivity extends RootActivity {
         childUpdates.put( id, todo.toFirebaseObject());
 
 
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
 
@@ -198,5 +232,30 @@ public class MainActivity extends RootActivity {
 
     }
 
+    public void searchTodo(){
+
+        searchList = new ArrayList<>();
+        searchList.clear();
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("name").
+                startAt("Vinod").
+                addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot data : dataSnapshot.getChildren() ){
+                            Todo todo = data.getValue(Todo.class);
+                            searchList.add(todo);
+                        }
+                        if(!searchList.isEmpty())
+                            adapter.addToSearchList(searchList);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+    }
 
 }

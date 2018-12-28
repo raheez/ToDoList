@@ -1,14 +1,17 @@
 package com.example.muhammedraheezrahman.todolist.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.muhammedraheezrahman.todolist.Model.Todo;
 import com.example.muhammedraheezrahman.todolist.R;
+import com.example.muhammedraheezrahman.todolist.UI.TodoDetatilActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +22,27 @@ class Viewholder extends RecyclerView.ViewHolder{
     public Viewholder(View itemView) {
         super(itemView);
         titleTv = (TextView) itemView.findViewById(R.id.nametv);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Toast.makeText(view.getContext(),"Adapter Position is "+ getAdapterPosition(),Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(view.getContext(),TodoDetatilActivity.class);
+                view.getContext().startActivity(i);
+
+            }
+        });
     }
 
+
+
 }
-public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder>{
 
     private List<Todo> list = new ArrayList<>();
+    private List<Todo> todoList = new ArrayList<>();
+    private List<Todo> searchResults = new ArrayList<>();
     private Context context;
     private Todo todo;
     public RecyclerAdapter(Context context){
@@ -38,7 +56,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder> {
 
     public void  addToList(List<Todo> list){
 
+
+        this.list.clear();
         this.list.addAll(list);
+        this.todoList.addAll(list);
         notifyDataSetChanged();
     }
 
@@ -64,5 +85,13 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder> {
     @Override
     public int getItemCount() {
         return this.list.size();
+    }
+
+
+    public void addToSearchList(List<Todo> list) {
+        this.list.clear();
+        this.list.addAll(list);
+        notifyDataSetChanged();
+
     }
 }

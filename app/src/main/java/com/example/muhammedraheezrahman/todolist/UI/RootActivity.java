@@ -1,7 +1,9 @@
-package com.example.muhammedraheezrahman.todolist;
+package com.example.muhammedraheezrahman.todolist.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
+
+import com.example.muhammedraheezrahman.todolist.R;
 
 public class RootActivity extends Activity {
     int onStartCount = 0;
