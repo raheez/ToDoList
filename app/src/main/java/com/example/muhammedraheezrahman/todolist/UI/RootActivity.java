@@ -2,10 +2,11 @@ package com.example.muhammedraheezrahman.todolist.UI;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import com.example.muhammedraheezrahman.todolist.R;
 
-public class RootActivity extends Activity {
+public class RootActivity extends AppCompatActivity {
     int onStartCount = 0;
 
     @Override

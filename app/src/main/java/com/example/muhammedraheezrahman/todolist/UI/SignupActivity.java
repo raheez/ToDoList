@@ -31,7 +31,7 @@ public class SignupActivity extends RootActivity {
 
         emailEt = (TextInputEditText) findViewById(R.id.email_et);
         passEt = (TextInputEditText) findViewById(R.id.passEt);
-        register = (Button) findViewById(R.id.registerBut);
+        register = (Button) findViewById(R.id.signupBut);
 
         auth = FirebaseAuth.getInstance();
 

@@ -11,4 +11,6 @@ public class TodoDetatilActivity extends RootActivity {
         setContentView(R.layout.activity_todo_details);
 
     }
+
+
 }

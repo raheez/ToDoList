@@ -72,6 +72,7 @@ public class LoginActivity extends RootActivity {
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this,SignupActivity.class);
                 startActivity(i);
+
             }
         });
     }
