@@ -3,6 +3,7 @@ package com.example.muhammedraheezrahman.todolist.UI;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.CalendarView;
@@ -36,6 +37,8 @@ public class TodoDetatilActivity extends RootActivity {
     private String dateString;
     private long dateLongType;
     private ShimmerFrameLayout shimmerFrameLayout;
+    private FloatingActionButton updateFab;
+    private String title,message,status;
     String key;
 
     Todo todo;
@@ -49,13 +52,28 @@ public class TodoDetatilActivity extends RootActivity {
         statusCb = (CheckBox) findViewById(R.id.status_Cb);
         calendarView = (CalendarView) findViewById(R.id.calendar_View);
         shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_detail_layout);
+        updateFab = (FloatingActionButton) findViewById(R.id.updatedFab);
 
         Bundle p = getIntent().getExtras();
         if (p!=null)
         key =p.getString("Key");
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {
+
+                dateString = day+"-"+(month+1)+"-"+year;
+
+            }
+        });
         getTodo();
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
+        updateFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateTodo(key);
+            }
+        });
 
 
 
@@ -67,46 +85,7 @@ public class TodoDetatilActivity extends RootActivity {
 
     }
 
-    public void searchTodo(){
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(key)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        for (DataSnapshot data : dataSnapshot.getChildren() ){
-                             todoobj = data.getValue(Todo.class);
-                        }
-                        if (todoobj!= null){
-                            titleET.setText(todoobj.gettitle());
-                            messageEt.setText(todoobj.getMessage());
-                            if (todoobj.getStatus().equals("Completed")){
-                                statusCb.setChecked(true);
-                            }else if (todoobj.getStatus().equals("Inprogress")){
-                                statusCb.setChecked(false);
-                            }
-
-                            try {
-                                dateString = todoobj.getDate();
-                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-                                Date date = sdf.parse(dateString);
-
-                                dateLongType = date.getTime();
-
-                            } catch (ParseException e) {
-                                e.printStackTrace();
-                            }
-                            calendarView.setDate(dateLongType);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                    }
-                });
-
-    }
 
     public void getTodo(){
 
@@ -155,27 +134,40 @@ public class TodoDetatilActivity extends RootActivity {
     }
 
     public void updateTodo(String id){
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        Todo todo = new Todo();
-        todo.setTitle("Vinod updated to Sai John");
-        todo.setMessage("My message is Freedom");
-        String dateString = "31/05/2016 06:15 PM";
-        todo.setDate(dateString);
 
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put( id, todo.toFirebaseObject());
+        title = titleET.getText().toString();
+        message = messageEt.getText().toString();
+        if (statusCb.isChecked()){
+            status = "Completed";
+        }
+        else
+            status = "Inprogress";
 
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
-                updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+        if (!title.isEmpty() && !message.isEmpty()){
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            Todo todo = new Todo();
+            todo.setTitle(titleET.getText().toString());
+            todo.setMessage(messageEt.getText().toString());
+            todo.setDate(dateString);
+            todo.setStatus(status);
 
-                        if (databaseError == null) {
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put( id, todo.toFirebaseObject());
 
-                            Toast.makeText(TodoDetatilActivity.this,"Completed",Toast.LENGTH_SHORT).show();
+            databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                    updateChildren(childUpdates, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+
+                            if (databaseError == null) {
+
+                                Toast.makeText(TodoDetatilActivity.this,"Completed",Toast.LENGTH_SHORT).show();
 //                    finish();
+                            }
                         }
-                    }
-                });
+                    });
+        }
+
+
     }
 }
