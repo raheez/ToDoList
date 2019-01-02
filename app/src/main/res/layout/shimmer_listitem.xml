@@ -55,7 +55,7 @@
                 android:background="@color/darkgrey"
                 android:layout_marginLeft="20dp"
                 android:layout_toRightOf="@id/statusImage"
-                android:layout_toLeftOf="@id/timeTv"
+                android:layout_toLeftOf="@id/timeShimmer"
                 android:layout_marginRight="50dp"
                 android:layout_alignTop="@+id/statusImage"
                 />
@@ -68,7 +68,7 @@
                 android:layout_toRightOf="@id/statusImage"
                 android:background="@color/darkgrey"
                 android:layout_marginTop="15dp"
-                android:layout_toLeftOf="@id/timeTv"
+                android:layout_toLeftOf="@id/timeShimmer"
                 android:layout_marginRight="40dp"
                 android:layout_below="@id/nametv"/>
 

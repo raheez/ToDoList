@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.view.View;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.Toast;
 
 import com.example.muhammedraheezrahman.todolist.Model.Todo;
 import com.example.muhammedraheezrahman.todolist.R;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +35,8 @@ public class TodoDetatilActivity extends RootActivity {
     private CheckBox statusCb;
     private String dateString;
     private long dateLongType;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    String key;
 
     Todo todo;
     Todo todoobj;
@@ -40,49 +44,60 @@ public class TodoDetatilActivity extends RootActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_todo_detail);
-        titleET = (TextInputEditText) findViewById(R.id.title_et);
-        messageEt = (TextInputEditText) findViewById(R.id.message_Et);
-        statusCb = (CheckBox) findViewById(R.id.statusCb);
-        calendarView = (CalendarView) findViewById(R.id.calendarView);
+        titleET = (TextInputEditText) findViewById(R.id.titleEt);
+        messageEt = (TextInputEditText) findViewById(R.id.messageEt);
+        statusCb = (CheckBox) findViewById(R.id.status_Cb);
+        calendarView = (CalendarView) findViewById(R.id.calendar_View);
+        shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_detail_layout);
+
+        Bundle p = getIntent().getExtras();
+        if (p!=null)
+        key =p.getString("Key");
+        getTodo();
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
+
+
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (todoobj!= null){
-            titleET.setText(todoobj.gettitle());
-            messageEt.setText(todoobj.getMessage());
-            statusCb.setText(todoobj.getStatus());
 
-            try {
-                dateString = todoobj.getDate();
-                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                Date date = sdf.parse(dateString);
-
-                 dateLongType = date.getTime();
-
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            calendarView.setDate(dateLongType);
-        }
     }
 
     public void searchTodo(){
 
-        searchList = new ArrayList<>();
-        searchList.clear();
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("name").
-                startAt("Vinod").
-                addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child(key)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         for (DataSnapshot data : dataSnapshot.getChildren() ){
-                             todo = data.getValue(Todo.class);
+                             todoobj = data.getValue(Todo.class);
                         }
+                        if (todoobj!= null){
+                            titleET.setText(todoobj.gettitle());
+                            messageEt.setText(todoobj.getMessage());
+                            if (todoobj.getStatus().equals("Completed")){
+                                statusCb.setChecked(true);
+                            }else if (todoobj.getStatus().equals("Inprogress")){
+                                statusCb.setChecked(false);
+                            }
 
+                            try {
+                                dateString = todoobj.getDate();
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                                Date date = sdf.parse(dateString);
+
+                                dateLongType = date.getTime();
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            calendarView.setDate(dateLongType);
+                        }
                     }
 
                     @Override
@@ -96,7 +111,7 @@ public class TodoDetatilActivity extends RootActivity {
     public void getTodo(){
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("name")
+        databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).orderByChild("id").equalTo(key)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -104,6 +119,31 @@ public class TodoDetatilActivity extends RootActivity {
                              todo = data.getValue(Todo.class);
                         }
                         todoobj = todo;
+                        if (todoobj!= null){
+                            titleET.setText(todoobj.gettitle());
+                            messageEt.setText(todoobj.getMessage());
+                            if (todoobj.getStatus().equals("Completed")){
+                                statusCb.setChecked(true);
+                            }else if (todoobj.getStatus().equals("Inprogress")){
+                                statusCb.setChecked(false);
+                            }
+
+                            try {
+                                dateString = todoobj.getDate();
+                                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                                Date date = sdf.parse(dateString);
+
+                                dateLongType = date.getTime();
+
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                            }
+                            calendarView.setDate(dateLongType);
+                        }
+
+                        shimmerFrameLayout.stopShimmer();
+                        shimmerFrameLayout.setVisibility(View.GONE);
+
                     }
 
                     @Override
