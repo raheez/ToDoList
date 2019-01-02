@@ -34,7 +34,6 @@ public class RootActivity extends AppCompatActivity {
         } else if (onStartCount == 1) {
             onStartCount++;
         }
-
     }
 
     @Override

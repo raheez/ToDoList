@@ -17,17 +17,14 @@ public class SplashScreen extends RootActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         imageView = (ImageView) findViewById(R.id.logo_image);
-
         propagateToMainActivity();
         pumpHeart();
     }
 
     private void propagateToMainActivity() {
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-
                 Intent i = new Intent(SplashScreen.this,LoginActivity.class);
                 startActivity(i);
                 finish();

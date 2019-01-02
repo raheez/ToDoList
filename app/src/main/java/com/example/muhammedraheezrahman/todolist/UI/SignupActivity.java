@@ -39,9 +39,7 @@ public class SignupActivity extends RootActivity {
         emailEt = (TextInputEditText) findViewById(R.id.email_et);
         passEt = (TextInputEditText) findViewById(R.id.passEt);
         registerBtn = (Button) findViewById(R.id.signupBut);
-
         auth = FirebaseAuth.getInstance();
-
         relativeLayout = (RelativeLayout) findViewById(R.id.rvSignup);
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -50,8 +48,6 @@ public class SignupActivity extends RootActivity {
                 password = passEt.getText().toString();
 
                 isEmailValid = isValidEmail(email);
-
-
                 if(email.isEmpty()){
                     emailEt.setError("Email is Empty");
                 }
@@ -73,7 +69,6 @@ public class SignupActivity extends RootActivity {
                             .setDimAmount(0.5f)
                             .show();
                     signup();
-
                 }
             }
         });

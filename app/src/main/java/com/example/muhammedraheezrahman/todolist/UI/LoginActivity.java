@@ -42,7 +42,6 @@ public class LoginActivity extends RootActivity {
         relativeLayout = (RelativeLayout) findViewById(R.id.rv);
 
         auth = FirebaseAuth.getInstance();
-
         if (auth.getCurrentUser()!=null){
             startActivity(new Intent(LoginActivity.this,ListActivity.class));
             finish();
@@ -79,8 +78,6 @@ public class LoginActivity extends RootActivity {
                     login();
 
                 }
-
-
             }
         });
 
@@ -90,7 +87,6 @@ public class LoginActivity extends RootActivity {
             public void onClick(View view) {
                 Intent i = new Intent(LoginActivity.this,SignupActivity.class);
                 startActivity(i);
-
             }
         });
     }
@@ -127,7 +123,6 @@ public class LoginActivity extends RootActivity {
                         }
                     }
                 });
-
     }
 
     public static boolean isValidEmail(String target) {

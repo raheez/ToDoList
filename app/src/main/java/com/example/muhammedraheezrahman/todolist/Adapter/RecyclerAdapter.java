@@ -38,7 +38,6 @@ class Viewholder extends RecyclerView.ViewHolder{
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(view.getContext(),"Adapter Position is "+ getAdapterPosition(),Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(view.getContext(),TodoDetatilActivity.class);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 Todo todo = RecyclerAdapter.todoList.get(getAdapterPosition());
