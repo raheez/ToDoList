@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.muhammedraheezrahman.todolist.Adapter.RecyclerAdapter;
@@ -100,9 +101,12 @@ public class ListActivity extends RootActivity {
                             Todo todo = data.getValue(Todo.class);
                             list.add(todo);
                         }
-                        if(!list.isEmpty())
+                        if(!list.isEmpty()){
                             adapter.addToList(list);
-                            stopShimmerEffect();
+                        }
+                        if (list.isEmpty()){
+                        }
+                        stopShimmerEffect();
                     }
 
                     @Override

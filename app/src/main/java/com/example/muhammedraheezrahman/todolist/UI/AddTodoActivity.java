@@ -66,7 +66,13 @@ public class AddTodoActivity extends RootActivity {
         else
             status = "Inprogress";
 
-        if (!title.isEmpty() && !message.isEmpty()){
+        if (title.isEmpty()){
+            titleEt.setError("Please enter the Title");
+        }
+        if (message.isEmpty()){
+            message = " ";
+        }
+        if (!title.isEmpty()){
 
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();

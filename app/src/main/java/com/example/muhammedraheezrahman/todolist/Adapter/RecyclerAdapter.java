@@ -73,11 +73,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder>{
 
     }
 
-    public void  addToList(List<Todo> list){
+    public void addToList(List<Todo> list){
 
 
         this.list.clear();
         this.list.addAll(list);
+        this.todoList.clear();
         this.todoList.addAll(list);
         notifyDataSetChanged();
     }
@@ -98,6 +99,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder>{
 
             holder.titleTv.setText(todo.gettitle().toString());
 
+        }
+        if (!todo.getMessage().isEmpty()){
+            holder.messageTv.setText(todo.getMessage().toString());
         }
         if (!todo.getStatus().isEmpty()){
             if (todo.getStatus().equals("Completed")){

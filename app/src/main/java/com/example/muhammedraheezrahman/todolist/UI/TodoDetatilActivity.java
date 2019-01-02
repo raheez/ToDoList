@@ -1,13 +1,16 @@
 package com.example.muhammedraheezrahman.todolist.UI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.CheckBox;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.example.muhammedraheezrahman.todolist.Model.Todo;
@@ -18,6 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
@@ -39,6 +43,8 @@ public class TodoDetatilActivity extends RootActivity {
     private ShimmerFrameLayout shimmerFrameLayout;
     private FloatingActionButton updateFab;
     private String title,message,status;
+    private FloatingActionButton deleteFab;
+    private RelativeLayout relativeLayout;
     String key;
 
     Todo todo;
@@ -53,6 +59,8 @@ public class TodoDetatilActivity extends RootActivity {
         calendarView = (CalendarView) findViewById(R.id.calendar_View);
         shimmerFrameLayout = (ShimmerFrameLayout) findViewById(R.id.shimmer_detail_layout);
         updateFab = (FloatingActionButton) findViewById(R.id.updatedFab);
+        deleteFab = (FloatingActionButton) findViewById(R.id.deleteFab);
+        relativeLayout = (RelativeLayout) findViewById(R.id.relativeLayout);
 
         Bundle p = getIntent().getExtras();
         if (p!=null)
@@ -74,6 +82,21 @@ public class TodoDetatilActivity extends RootActivity {
                 updateTodo(key);
             }
         });
+        deleteFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Snackbar snackbar = Snackbar.make(relativeLayout,"Click on OK to delete",Snackbar.LENGTH_SHORT).
+                        setAction("OK", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                deleteTodo();
+
+                            }
+                        });
+                snackbar.setActionTextColor(getResources().getColor(R.color.white));
+                snackbar.show();
+            }
+        });
 
 
 
@@ -82,10 +105,29 @@ public class TodoDetatilActivity extends RootActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
     }
 
 
+    public void deleteTodo(){
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        Query query = databaseReference.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).
+                orderByChild("id").equalTo(key);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                    appleSnapshot.getRef().removeValue();
+                }
+                Intent i = new Intent(getApplicationContext(),ListActivity.class);
+                startActivity(i);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+    }
 
     public void getTodo(){
 

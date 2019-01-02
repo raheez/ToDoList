@@ -7,5 +7,6 @@
     <color name="white">#FFFFFF</color>
     <color name="darkgrey">#808080</color>
     <color name="lightgrey">#DCDCDC</color>
+    <color name="signupButtonColor">#6A5ACD</color>
 
 </resources>

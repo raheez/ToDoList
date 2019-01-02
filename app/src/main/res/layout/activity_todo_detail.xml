@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     tools:context=".UI.LoginActivity"
+    android:id="@+id/relativeLayout"
     android:background="@drawable/bg_gradient">
 
 
@@ -105,6 +106,17 @@
                 android:src="@drawable/update_icon"
                 android:elevation="20dp"
                 android:id="@+id/updatedFab"
+                />
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="16dp"
+                android:src="@drawable/delete_icon"
+                android:elevation="20dp"
+                android:id="@+id/deleteFab"
                 />
 
         </RelativeLayout>
