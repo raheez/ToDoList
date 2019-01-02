@@ -150,6 +150,7 @@ public class TodoDetatilActivity extends RootActivity {
             todo.setMessage(messageEt.getText().toString());
             todo.setDate(dateString);
             todo.setStatus(status);
+            todo.setId(key);
 
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put( id, todo.toFirebaseObject());
