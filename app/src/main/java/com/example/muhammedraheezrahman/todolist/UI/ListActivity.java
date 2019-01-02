@@ -81,6 +81,7 @@ public class ListActivity extends RootActivity {
     protected void onResume() {
         shimmerFrameLayout.startShimmer();
         shimmerFrameLayout.setVisibility(View.VISIBLE);
+        rv.setVisibility(View.INVISIBLE);
         super.onResume();
         getToDoList();
     }
@@ -120,6 +121,7 @@ public class ListActivity extends RootActivity {
 
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
+        rv.setVisibility(View.VISIBLE);
     }
 
     @Override

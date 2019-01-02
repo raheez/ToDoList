@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,7 +32,6 @@ public class AddTodoActivity extends RootActivity {
     private CalendarView calendarView;
     private CheckBox statusCb;
     private String dateString;
-    private Long dateValue;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +41,11 @@ public class AddTodoActivity extends RootActivity {
         messageEt = (TextInputEditText) findViewById(R.id.message_Et);
         calendarView = (CalendarView) findViewById(R.id.calendarView);
         statusCb = (CheckBox) findViewById(R.id.statusCb);
+
+        Date date = new Date();
+        date = Calendar.getInstance().getTime();
+        DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        dateString = dateFormat.format(date);
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView calendarView, int year, int month, int day) {

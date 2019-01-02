@@ -33,8 +33,6 @@
             <include
                 layout="@layout/shimmer_listitem"/>
 
-            <include
-                layout="@layout/shimmer_listitem"/>
 
 
 
