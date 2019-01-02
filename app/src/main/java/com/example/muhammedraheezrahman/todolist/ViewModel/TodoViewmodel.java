@@ -2,10 +2,8 @@ package com.example.muhammedraheezrahman.todolist.ViewModel;
 
 import android.arch.lifecycle.ViewModel;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.muhammedraheezrahman.todolist.Model.Todo;
-import com.example.muhammedraheezrahman.todolist.UI.MainActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,7 +35,7 @@ public class TodoViewmodel extends ViewModel {
         Log.d("AlanLey","the key is "+ key);
 
         Todo todo = new Todo();
-        todo.setName("Craig Daniel ");
+        todo.setTitle("Craig Daniel ");
         todo.setMessage("Explore life");
         todo.setDate(dateString);
         todo.setId(key);
@@ -50,7 +48,7 @@ public class TodoViewmodel extends ViewModel {
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null) {
 
-//                    Toast.makeText(MainActivity.this,"Completed",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(ListActivity.this,"Completed",Toast.LENGTH_SHORT).show();
 //                    finish();
                 }
             }

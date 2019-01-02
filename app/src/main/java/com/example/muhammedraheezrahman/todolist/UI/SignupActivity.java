@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -98,11 +97,11 @@ public class SignupActivity extends RootActivity {
                                         }
                                     });
 
-
+                            snackbar.setActionTextColor(getResources().getColor(R.color.white));
                             snackbar.show();
                         }
                         else{
-                            startActivity(new Intent(SignupActivity.this,MainActivity.class));
+                            startActivity(new Intent(SignupActivity.this,ListActivity.class));
                             hud.dismiss();
                             registerBtn.setEnabled(true);
                             finish();

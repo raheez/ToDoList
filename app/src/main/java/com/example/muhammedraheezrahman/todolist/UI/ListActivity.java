@@ -1,15 +1,12 @@
 package com.example.muhammedraheezrahman.todolist.UI;
 
-import android.arch.lifecycle.ViewModel;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -20,6 +17,7 @@ import com.example.muhammedraheezrahman.todolist.Adapter.RecyclerAdapter;
 import com.example.muhammedraheezrahman.todolist.Model.Todo;
 import com.example.muhammedraheezrahman.todolist.R;
 import com.example.muhammedraheezrahman.todolist.ViewModel.TodoViewmodel;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -35,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MainActivity extends RootActivity {
+public class ListActivity extends RootActivity {
     private RecyclerView rv;
     private LinearLayoutManager llm;
     private RecyclerAdapter adapter;
@@ -49,6 +47,7 @@ public class MainActivity extends RootActivity {
     private List<Todo> searchList;
     Snackbar snackbar;
     TodoViewmodel todovm;
+    ShimmerFrameLayout shimmerFrameLayout;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,23 +55,27 @@ public class MainActivity extends RootActivity {
         setContentView(R.layout.activity_main);
         addIcon = (FloatingActionButton) findViewById(R.id.add_icon);
 
+        shimmerFrameLayout  = (ShimmerFrameLayout) findViewById(R.id.shimmer_layout);
+
         database = FirebaseDatabase.getInstance();
         rv = (RecyclerView) findViewById(R.id.recycler);
         llm = new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         rv.setLayoutManager(llm);
 
-//        todoViewmodel = ViewModelProviders.of(MainActivity.this).get(TodoViewmodel.class);
+//        todoViewmodel = ViewModelProviders.of(ListActivity.this).get(TodoViewmodel.class);
         todoList = new ArrayList<>();
         adapter = new RecyclerAdapter(getApplicationContext());
         rv.setAdapter(adapter);
+        llm.setSmoothScrollbarEnabled(true);
         todovm = ViewModelProviders.of(this).get(TodoViewmodel.class);
 
         llm.setSmoothScrollbarEnabled(false);
 
+
         addIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,AddTodoActivity.class);
+                Intent i = new Intent(ListActivity.this,AddTodoActivity.class);
                 startActivity(i);
 //                  todovm.addToDo();
 //                addToDo();
@@ -87,8 +90,10 @@ public class MainActivity extends RootActivity {
 
     @Override
     protected void onResume() {
+        shimmerFrameLayout.startShimmer();
+        shimmerFrameLayout.setVisibility(View.VISIBLE);
         super.onResume();
-        todoList = getToDoList();
+        getToDoList();
 
 
         //
@@ -110,19 +115,18 @@ public class MainActivity extends RootActivity {
 //        }
     }
 
-
-    public void showProgress(){
-
-        hud = KProgressHUD.create(this)
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE).show();
-
+    @Override
+    protected void onPause() {
+        super.onPause();
     }
+
+
 
     public void dismissProgress(){
         hud.dismiss();
     }
 
-    private List<Todo> getToDoList() {
+    private void getToDoList() {
         list = new ArrayList<>();
         list.clear();
         database.getReference(FirebaseAuth.getInstance().getCurrentUser().getUid()).
@@ -135,6 +139,7 @@ public class MainActivity extends RootActivity {
                         }
                         if(!list.isEmpty())
                             adapter.addToList(list);
+                            stopShimmerEffect();
                     }
 
                     @Override
@@ -185,10 +190,14 @@ public class MainActivity extends RootActivity {
 //                    }
 //                });
 
-
-        return list;
     }
 
+    void stopShimmerEffect(){
+
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+
+    }
     void addToDo() {
 
         Date date = new Date();
@@ -208,7 +217,7 @@ public class MainActivity extends RootActivity {
         Log.d("AlanLey","the key is "+ key);
 
         Todo todo = new Todo();
-        todo.setName("Craig Daniel James Bond");
+        todo.setTitle("Craig Daniel James Bond");
         todo.setMessage("My message is Freedom from Sai");
         todo.setDate(dateString);
         todo.setId(key);
@@ -221,7 +230,7 @@ public class MainActivity extends RootActivity {
             public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
                 if (databaseError == null) {
 
-                    Toast.makeText(MainActivity.this,"Completed",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListActivity.this,"Completed",Toast.LENGTH_SHORT).show();
 //                    finish();
                 }
             }
@@ -233,7 +242,7 @@ public class MainActivity extends RootActivity {
     public void updateTodo(String id){
         databaseReference = FirebaseDatabase.getInstance().getReference();
         Todo todo = new Todo();
-        todo.setName("Vinod updated to Sai John");
+        todo.setTitle("Vinod updated to Sai John");
         todo.setMessage("My message is Freedom");
         String dateString = "31/05/2016 06:15 PM";
         todo.setDate(dateString);
@@ -248,7 +257,7 @@ public class MainActivity extends RootActivity {
 
                 if (databaseError == null) {
 
-                    Toast.makeText(MainActivity.this,"Completed",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListActivity.this,"Completed",Toast.LENGTH_SHORT).show();
 //                    finish();
                 }
             }

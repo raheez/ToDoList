@@ -20,9 +20,9 @@
         </activity>
 
         <activity android:name=".UI.LoginActivity"></activity>
-        <activity android:name=".UI.MainActivity"></activity>
         <activity android:name=".UI.SignupActivity"></activity>
         <activity android:name=".UI.TodoDetatilActivity"></activity>
+        <activity android:name=".UI.ListActivity"></activity>
         <activity android:name=".UI.AddTodoActivity"></activity>
 
     </application>

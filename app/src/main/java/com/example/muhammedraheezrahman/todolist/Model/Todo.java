@@ -3,16 +3,24 @@ package com.example.muhammedraheezrahman.todolist.Model;
 import java.util.HashMap;
 
 public class Todo {
-    private String name;
+    private String tilte;
     private String message;
     private String date;
     private String id;
-    private int status;
+    private String status;
 
 
 
     public Todo() {
 
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getId() {
@@ -31,12 +39,12 @@ public class Todo {
         this.date = date;
     }
 
-    public String getName() {
-        return name;
+    public String gettitle() {
+        return tilte;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String tilte) {
+        this.tilte = tilte;
     }
 
     public String getMessage() {
@@ -50,9 +58,11 @@ public class Todo {
 
     public HashMap<String,String> toFirebaseObject() {
         HashMap<String,String> todo =  new HashMap<String,String>();
-        todo.put("name", name);
+        todo.put("title", tilte);
         todo.put("message", message);
         todo.put("date", date);
+        todo.put("id",id);
+        todo.put("status",status);
 
         return todo;
     }

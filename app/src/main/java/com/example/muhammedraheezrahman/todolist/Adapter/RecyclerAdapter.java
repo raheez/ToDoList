@@ -6,9 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.muhammedraheezrahman.todolist.Model.Todo;
 import com.example.muhammedraheezrahman.todolist.R;
 import com.example.muhammedraheezrahman.todolist.UI.TodoDetatilActivity;
@@ -16,12 +18,18 @@ import com.example.muhammedraheezrahman.todolist.UI.TodoDetatilActivity;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 class Viewholder extends RecyclerView.ViewHolder{
 
     public TextView titleTv;
+    public TextView messageTv;
+    public CircleImageView statusImage;
     public Viewholder(View itemView) {
         super(itemView);
         titleTv = (TextView) itemView.findViewById(R.id.nametv);
+        messageTv = (TextView) itemView.findViewById(R.id.messageTv);
+        statusImage = (CircleImageView) itemView.findViewById(R.id.statusImage);
 
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +54,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder>{
     private List<Todo> searchResults = new ArrayList<>();
     private Context context;
     private Todo todo;
+
     public RecyclerAdapter(Context context){
 
         this.context = context;
@@ -76,11 +85,20 @@ public class RecyclerAdapter extends RecyclerView.Adapter<Viewholder>{
 
         if (list.size()>0)
         todo = list.get(position);
-        if (!todo.getName().toString().isEmpty()){
+        if (!todo.gettitle().toString().isEmpty()){
 
-            holder.titleTv.setText(todo.getName().toString());
+            holder.titleTv.setText(todo.gettitle().toString());
 
         }
+        if (!todo.getStatus().isEmpty()){
+            if (todo.getStatus().equals("Completed")){
+                Glide.with(context).load(R.drawable.completed).into(holder.statusImage);
+            }else if  (todo.getStatus().equals("Inprogress")){
+                Glide.with(context).load(R.drawable.progressicon).into(holder.statusImage);
+
+            }
+        }
+
     }
 
     @Override

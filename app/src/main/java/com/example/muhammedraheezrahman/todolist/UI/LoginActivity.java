@@ -11,7 +11,6 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.example.muhammedraheezrahman.todolist.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,7 +44,7 @@ public class LoginActivity extends RootActivity {
         auth = FirebaseAuth.getInstance();
 
         if (auth.getCurrentUser()!=null){
-            startActivity(new Intent(LoginActivity.this,MainActivity.class));
+            startActivity(new Intent(LoginActivity.this,ListActivity.class));
             finish();
         }
         loginbtn.setOnClickListener(new View.OnClickListener() {
@@ -116,11 +115,11 @@ public class LoginActivity extends RootActivity {
                                             snackbar.dismiss();
                                         }
                                     });
-
+                            snackbar.setActionTextColor(getResources().getColor(R.color.white));
                             snackbar.show();
                         }
                         else {
-                            Intent i = new Intent(LoginActivity.this,MainActivity.class);
+                            Intent i = new Intent(LoginActivity.this,ListActivity.class);
                             startActivity(i);
                             hud.dismiss();
                             loginbtn.setEnabled(true);

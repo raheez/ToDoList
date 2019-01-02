@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg_gradient">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="wrap_content"
@@ -15,6 +16,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
+
+            <include
+                layout="@layout/shimmer_listitem"/>
+
+            <include
+                layout="@layout/shimmer_listitem"/>
+
+            <include
+                layout="@layout/shimmer_listitem"/>
+
+            <include
+                layout="@layout/shimmer_listitem"/>
+
+            <include
+                layout="@layout/shimmer_listitem"/>
+
+            <include
+                layout="@layout/shimmer_listitem"/>
 
 
 
@@ -40,7 +60,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="20dp"
-        android:src="@drawable/add_icon"
+        android:src="@drawable/todo_icon"
         android:id="@+id/add_icon"
         />
 
